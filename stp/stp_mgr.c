@@ -1863,6 +1863,11 @@ static void stpmgr_process_vlan_mem_config_msg(void *msg)
         else
         {
         	stpsync_del_port_state(pmsg->intf_name, pmsg->inst_id);
+            /* The port is not in this instance's control mask, so the usual
+            * STP_VLAN_PORT_TABLE cleanup path is skipped and the row can be
+            * left orphaned in APP_DB. Mirror the delete in the if-branch.
+            */
+            stpsync_del_port_class(pmsg->intf_name, pmsg->vlan_id);
         }
     }
 }
